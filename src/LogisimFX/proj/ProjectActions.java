@@ -103,7 +103,9 @@ public class ProjectActions {
 
 		LoadingScreen.nextStep();
 
-		Platform.runLater(()->new CreateFrame(loader, ret));
+		//Platform.runLater(()->new CreateFrame(loader, ret));
+		LoadingScreen.Close();
+		FrameManager.CreateMainFrame(ret);
 		//SwingUtilities.invokeLater(new CreateFrame(loader, ret, isStartup));
 		return ret;
 

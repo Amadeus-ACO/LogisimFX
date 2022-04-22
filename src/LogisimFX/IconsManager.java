@@ -15,6 +15,7 @@ public class IconsManager {
     private static final String logoPath = "LogisimFX/resources/logo";
 
     public static final Image LogisimFX = new Image("LogisimFX/resources/logo/logisimfx_128.png");
+    public static final ImageView LogisimFX_imgvw = new ImageView("LogisimFX/resources/logo/logisimfx_128.png");
 
     public static ImageView getIcon(String name) {
         return getImageView(name);

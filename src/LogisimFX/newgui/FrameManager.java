@@ -35,6 +35,8 @@ public class FrameManager {
 
     private static FXMLLoader loader;
 
+    private static Scene scene;
+
     /*
     A reference to the current AbstractController, if you need to call an additional initialization method (not postInit).
     Guaranteed to work only within the Create...Frame, I can't guarantee the rest
@@ -67,6 +69,9 @@ public class FrameManager {
 
 
     //MainFrame
+    public static Scene getScene(){
+        return scene;
+    }
 
     public static void CreateMainFrame(Project proj){
 
@@ -75,13 +80,14 @@ public class FrameManager {
         Parent root = null;
 
         try {
-                root = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Stage newStage = new Stage();
         newStage.setScene(new Scene(root, 800, 600));
+        scene = newStage.getScene();
 
         newStage.getIcons().add(IconsManager.LogisimFX);
 
@@ -90,37 +96,37 @@ public class FrameManager {
 
         newStage.setOnHiding(event -> {
 
-                event.consume();
+            event.consume();
 
-                //Todo: possible problem on exit https://stackoverflow.com/questions/46053974/using-platform-exit-and-system-exitint-together
+            //Todo: possible problem on exit https://stackoverflow.com/questions/46053974/using-platform-exit-and-system-exitint-together
 
-                if (proj.isFileDirty()){
+            if (proj.isFileDirty()){
 
-                    int type = DialogManager.CreateConfirmCloseDialog(proj);
+                int type = DialogManager.CreateConfirmCloseDialog(proj);
 
-                    if (type == 2) {
+                if (type == 2) {
 
-                        ProjectActions.doSave(proj);
+                    ProjectActions.doSave(proj);
 
-                        CloseFrame(proj);
-
-                    } else if (type == 1) {
-
-                        CloseFrame(proj);
-
-                    } else if (type == 0) {
-
-                        newStage.showAndWait();
-
-                    }
-
-                }else{
                     CloseFrame(proj);
+
+                } else if (type == 1) {
+
+                    CloseFrame(proj);
+
+                } else if (type == 0) {
+
+                    newStage.showAndWait();
+
                 }
 
+            }else{
+                CloseFrame(proj);
+            }
 
-            });
-        newStage.show();
+
+        });
+        //  newStage.show();
 
         OpenedMainFrames.put(proj, new Data(newStage,c,isStartup));
         isStartup = false;
@@ -512,8 +518,8 @@ public class FrameManager {
             proj.getSimulator().shutDown();
             proj.getFrameController().onClose();
 
-            Platform.exit();
-            System.exit(0);
+            // Platform.exit();
+            // System.exit(0);
 
         }
 
@@ -573,8 +579,8 @@ public class FrameManager {
 
     public static void ForceExit(){
 
-        Platform.exit();
-        System.exit(0);
+        //  Platform.exit();
+        //System.exit(0);
 
     }
 

@@ -6,6 +6,7 @@
 package LogisimFX;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application{
@@ -27,9 +28,13 @@ public class Main extends Application{
         Startup startup = Startup.parseArgs(arguments);
 
         if (startup == null) {
-            System.exit(0);
+            //System.exit(0);
         } else {
-            startup.run();
+            try {
+                startup.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

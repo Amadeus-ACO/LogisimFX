@@ -16,11 +16,13 @@ import LogisimFX.file.LoadFailedException;
 import LogisimFX.prefs.AppPreferences;
 import LogisimFX.proj.ProjectActions;
 import LogisimFX.util.StringUtil;
+import javafx.concurrent.Task;
+import javafx.scene.Scene;
 
 import java.io.File;
 import java.util.*;
 
-public class Startup {
+public class Startup extends Task<Void> {
 
     private static final Localizer lc = LC_start.getInstance();
 
@@ -110,18 +112,22 @@ public class Startup {
         return Collections.unmodifiableMap(substitutions);
     }
 
-    public void run() {
+    @Override
+    public Void call() throws Exception {
 
+        System.out.println("lolxd1 " + this.getState());
+
+        Scene scene = null;
         //FrameManager.CreateLoadingScreen();
 
         if (isTty) {
             try {
                 TtyInterface.run(this);
-                return;
+                return null;
             } catch (Throwable t) {
                 t.printStackTrace();
-                System.exit(-1);
-                return;
+                //System.exit(-1);
+                return null;
             }
         }
 
@@ -133,6 +139,7 @@ public class Startup {
 
             try {
                 FrameManager.CreateLoadingScreen();
+                System.out.println("lolxd1/0");
                 //monitor = new SplashScreen();
                 //monitor.setVisible(true);
             } catch (Throwable t) {
@@ -184,10 +191,14 @@ public class Startup {
         // use that as the file to open now.
         initialized = true;
 
+        System.out.println("lolxd1/1");
+
         // load file
         if (filesToOpen.isEmpty()) {
 
             ProjectActions.doNew();
+
+            System.out.println("lolxd2");
 
             if (showSplash) {
                 //LoadingScreen.Close();
@@ -204,7 +215,8 @@ public class Startup {
 					ProjectActions.doOpen(fileToOpen, substitutions);
 				} catch (LoadFailedException ex) {
 					System.err.println(fileToOpen.getName() + ": " + ex.getMessage()); //OK
-					System.exit(-1);
+                    return null;
+					//System.exit(-1);
 				}
 
                 if (first) {
@@ -223,6 +235,10 @@ public class Startup {
         for (File fileToPrint : filesToPrint) {
             doPrintFile(fileToPrint);
         }
+
+        System.out.println("lolxd3 " + this.getState());
+
+        return null;
 
     }
 
@@ -450,7 +466,5 @@ public class Startup {
         System.exit(-1);
 
     }
-
-
 
 }
